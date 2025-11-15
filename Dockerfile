@@ -1,14 +1,24 @@
-FROM node:18
+FROM node:18-bullseye
 
-RUN apt-get update && apt-get install -y ffmpeg
+# Install FFmpeg
+RUN apt-get update && \
+    apt-get install -y ffmpeg && \
+    apt-get clean
 
+# Set work directory
 WORKDIR /app
 
-COPY package.json .
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
 RUN npm install
 
+# Copy app files
 COPY . .
 
+# Expose port 3000
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# Start server
+CMD ["node", "server.js"]
